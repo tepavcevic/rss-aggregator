@@ -34,5 +34,9 @@ func (apiCfg *apiConfig) handlerCreateUser(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	respondWithJSON(w, 200, dbUserToUser(user))
+	respondWithJSON(w, http.StatusCreated, dbUserToUser(user))
+}
+
+func (apiCnf *apiConfig) handlerGetCurrentUser(w http.ResponseWriter, r *http.Request, user database.User) {
+	respondWithJSON(w, http.StatusOK, dbUserToUser(user))
 }

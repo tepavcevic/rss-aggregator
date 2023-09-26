@@ -6,5 +6,14 @@ RETURNING *;
 -- name: GetAllFeed :many
 SELECT * FROM feeds;
 
--- name: DeleteFeedFollow :exec
-DELETE FROM feed_follows WHERE feed_id = $1 AND user_id = $2;
+-- name: GetNextFeedsToFetch :many
+SELECT * FROM feeds
+ORDER BY last_fetched_at ASC NULLS FIRST
+LIMIT $1;
+
+-- name: MarkFeedAsFetched :one
+UPDATE feeds
+SET last_fetched_at = NOW(),
+updated_at = NOW()
+WHERE id = $1
+RETURNING *;
